@@ -6,7 +6,7 @@ class FileInfo
     const SUCCESS_HTTP_CODE = 200;
     const FORMAT = 'url status traffic crawler';
 
-    private $file_info = [
+    private $fileInfo = [
         'views' => 0,
         'urls' => 0,
         'traffic' => 0,
@@ -21,27 +21,27 @@ class FileInfo
         $status = (int)$matches['status'];
         $crawler = $matches['crawler'];
 
-        $this->file_info['views'] += 1;
+        $this->fileInfo['views'] += 1;
 
         if ($status === self::SUCCESS_HTTP_CODE) {
-            $this->file_info['traffic'] += (int) $matches['traffic'];
+            $this->fileInfo['traffic'] += (int) $matches['traffic'];
         }
 
-        if (!empty($this->file_info['statusCodes'][$status])) {
-            $this->file_info['statusCodes'][$status] += 1;
+        if (!empty($this->fileInfo['statusCodes'][$status])) {
+            $this->fileInfo['statusCodes'][$status] += 1;
         } else {
-            $this->file_info['statusCodes'][$status] = 1;
+            $this->fileInfo['statusCodes'][$status] = 1;
         }
 
         if ($this->checkUrl($matches['url'])) {
-            $this->file_info['urls'] += 1;
+            $this->fileInfo['urls'] += 1;
         }
 
         if (!empty($crawler)) {
-            if (!empty($this->file_info['crawlers'][$crawler])) {
-                $this->file_info['crawlers'][$crawler] += 1;
+            if (!empty($this->fileInfo['crawlers'][$crawler])) {
+                $this->fileInfo['crawlers'][$crawler] += 1;
             } else {
-                $this->file_info['crawlers'][$crawler] = 1;
+                $this->fileInfo['crawlers'][$crawler] = 1;
             }
         }
     }
@@ -59,6 +59,6 @@ class FileInfo
 
     public function toJson(): string
     {
-        return json_encode($this->file_info);
+        return json_encode($this->fileInfo);
     }
 }

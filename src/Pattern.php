@@ -22,7 +22,7 @@ class Pattern
     {
         foreach (self::$patterns as $pattern => $replace) {
             if ($pattern == 'crawler') {
-                $replace = self::buildCrawlerPattern();
+                $replace = self::getCrawlerPattern();
             }
             $format = preg_replace("/{$pattern}/", $replace, $format);
         }
@@ -35,9 +35,9 @@ class Pattern
         return self::$crawlers;
     }
 
-    private static function buildCrawlerPattern()
+    private static function getCrawlerPattern(): string
     {
-        $crawlers_str = implode('|', array_keys(self::$crawlers));
-        return '(?P<crawler>' . $crawlers_str . ')';
+        $crawlersStr = implode('|', array_keys(self::$crawlers));
+        return '(?P<crawler>' . $crawlersStr . ')';
     }
 }

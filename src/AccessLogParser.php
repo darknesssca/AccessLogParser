@@ -3,37 +3,37 @@
 
 class AccessLogParser
 {
-    private $file_handler;
-    private $parsed_format;
-    private $need_find_crawler = false;
-    private $crawler_pattern = '';
+    private $fileHandler;
+    private $parsedFormat;
+    private $needFindCrawler = false;
+    private $crawlerPattern = '';
 
-    public function __construct(string $file_path, string $format)
+    public function __construct(string $filePath, string $format)
     {
         if (strpos($format, 'crawler') !== false) {
-            $this->need_find_crawler = true;
-            $this->crawler_pattern = Pattern::parseFormat('crawler');
+            $this->needFindCrawler = true;
+            $this->crawlerPattern = Pattern::parseFormat('crawler');
             $format = str_replace('crawler', 'useragent', $format);
         }
 
-        $this->parsed_format = Pattern::parseFormat($format);
+        $this->parsedFormat = Pattern::parseFormat($format);
 
-        $real_path = realpath($file_path);
-        $this->file_handler = new SplFileObject($real_path, 'r');
+        $realPath = realpath($filePath);
+        $this->fileHandler = new SplFileObject($realPath, 'r');
     }
 
     public function parse(callable $callback)
     {
-        while (!$this->file_handler->eof()) {
-            $line = $this->file_handler->fgets();
+        while (!$this->fileHandler->eof()) {
+            $line = $this->fileHandler->fgets();
 
-            if (!preg_match("/{$this->parsed_format}/", $line, $matches)) {
-                $this->file_handler = null;
+            if (!preg_match("/{$this->parsedFormat}/", $line, $matches)) {
+                $this->fileHandler = null;
                 throw new Exception('При разборе строки возникла ошибка');
             }
 
-            if ($this->need_find_crawler) {
-                if (!preg_match("/{$this->crawler_pattern}/", $matches['useragent'], $crawler)) {
+            if ($this->needFindCrawler) {
+                if (!preg_match("/{$this->crawlerPattern}/", $matches['useragent'], $crawler)) {
                     $matches['crawler'] = '';
                 }
 
@@ -45,6 +45,6 @@ class AccessLogParser
             $callback($matches);
         }
 
-        $this->file_handler = null;
+        $this->fileHandler = null;
     }
 }

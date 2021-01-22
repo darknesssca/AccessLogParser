@@ -1,10 +1,10 @@
 <?php
-spl_autoload_register(function ($class_name) {
-    include 'src/' . $class_name . '.php';
+spl_autoload_register(function ($className) {
+    include 'src/' . $className . '.php';
 });
 
-$file_info = new FileInfo();
+$fileInfo = new FileInfo();
 
-$access_log_parser = new AccessLogParser($argv[1], FileInfo::FORMAT);
-$access_log_parser->parse([&$file_info, 'addLineInfo']);
-echo $file_info->toJson();
+$accessLogParser = new AccessLogParser($argv[1], FileInfo::FORMAT);
+$accessLogParser->parse([&$fileInfo, 'addLineInfo']);
+echo $fileInfo->toJson();
