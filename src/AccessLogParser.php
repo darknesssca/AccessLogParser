@@ -5,13 +5,13 @@ class AccessLogParser
 {
     private $fileHandler;
     private $parsedFormat;
-    private $needFindCrawler = false;
-    private $crawlerPattern = '';
+    private $isNeedFindCrawler = false;
+    private $crawlerPattern;
 
     public function __construct(string $filePath, string $format)
     {
         if (strpos($format, 'crawler') !== false) {
-            $this->needFindCrawler = true;
+            $this->isNeedFindCrawler = true;
             $this->crawlerPattern = Pattern::parseFormat('crawler');
             $format = str_replace('crawler', 'useragent', $format);
         }
@@ -32,13 +32,13 @@ class AccessLogParser
                 throw new Exception('При разборе строки возникла ошибка');
             }
 
-            if ($this->needFindCrawler) {
+            if ($this->isNeedFindCrawler) {
                 if (!preg_match("/{$this->crawlerPattern}/", $matches['useragent'], $crawler)) {
                     $matches['crawler'] = '';
                 }
 
                 if (!empty($crawler['crawler'])) {
-                    $matches['crawler'] = Pattern::getCrawlers()[$crawler['crawler']];
+                    $matches['crawler'] = Pattern::crawlers()[$crawler['crawler']];
                 }
             }
 

@@ -30,14 +30,14 @@ class Pattern
         return $format;
     }
 
-    public static function getCrawlers(): array
+    public static function crawlers(): array
     {
         return self::$crawlers;
     }
 
     private static function getCrawlerPattern(): string
     {
-        $crawlersStr = implode('|', array_keys(self::$crawlers));
-        return '(?P<crawler>' . $crawlersStr . ')';
+        $crawlers = implode('|', array_keys(self::$crawlers));
+        return "(?P<crawler>{$crawlers})";
     }
 }
